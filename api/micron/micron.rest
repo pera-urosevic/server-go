@@ -1,0 +1,57 @@
+GET http://localhost:55556/micron/status
+
+###
+
+GET http://localhost:55556/micron/pause
+
+###
+
+GET http://localhost:55556/micron/resume
+
+###
+
+GET http://localhost:55556/micron/config
+
+###
+
+PUT http://localhost:55556/micron/config
+content-type: application/json
+
+{
+  "monitor": [
+    {
+      "name": "Monitor",
+      "enabled": false,
+      "net": false,
+      "cmd": "C:\\Users\\PeraU\\Apps\\DoubleCMD\\doublecmd.exe",
+      "args": [],
+      "match": {
+        "cmd": "doublecmd.exe",
+        "regex": ""
+      }
+    }
+  ],
+  "daily": [
+    {
+      "name": "Daily",
+      "enabled": false,
+      "net": true,
+      "cmd": "C:\\Users\\PeraU\\Apps\\DoubleCMD\\doublecmd.exe",
+      "args": [],
+      "time": "09:00",
+      "lastRun": "2024-12-11T07:07:17.015Z"
+    }
+  ],
+  "weekly": [
+    {
+      "name": "Weekly",
+      "enabled": false,
+      "net": true,
+      "cmd": "C:\\Users\\PeraU\\Apps\\DoubleCMD\\doublecmd.exe",
+      "args": [],
+      "time": "09:00",
+      "day": "monday",
+      "lastRun": "2024-12-08T07:01:22.562Z"
+    }
+  ]
+}

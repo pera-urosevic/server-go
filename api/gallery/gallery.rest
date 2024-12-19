@@ -1,0 +1,31 @@
+###
+
+GET http://localhost:55556/gallery
+
+###
+
+GET http://localhost:55556/gallery/yosemite
+
+###
+
+GET http://localhost:55556/gallery/sync
+
+###
+
+GET http://localhost:55556/gallery/photo/1174
+
+###
+
+GET http://localhost:55556/gallery/photo/1174/open
+
+###
+
+POST http://localhost:55556/flick/
+content-type: application/json
+
+{
+  "path": "some photo",
+  "title": "some title",
+  "description": "some description",
+  "keywords": "some keywords"
+}

@@ -1,0 +1,6 @@
+~*
+.env*
+*.sh
+*.ps1
+/tmp
+.favorites.json

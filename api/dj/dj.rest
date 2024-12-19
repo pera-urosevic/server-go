@@ -1,0 +1,19 @@
+GET http://localhost:55556/dj/queries
+
+###
+
+GET http://localhost:55556/dj/query/Mobile
+
+###
+
+GET http://localhost:55556/dj/playlist/Mobile
+
+###
+
+GET http://localhost:55556/dj/search/diego
+
+###
+
+PUT http://localhost:55556/dj/sync
+
+###

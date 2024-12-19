@@ -1,0 +1,8 @@
+GET http://localhost:55556/blog/posts/night
+
+###
+
+GET http://localhost:55556/blog/post/300
+
+###
+

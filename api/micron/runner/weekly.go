@@ -25,9 +25,9 @@ func Weekly(config *types.Config) {
 		now := time.Now().Format(time.RFC3339)
 		err := execute.WithDetach(task.Cmd, task.Args)
 		if err != nil {
-			log.Log("[Weekly] [FAIL]", task.Name, err)
+			log.Log("[WEEKLY] [FAIL]", task.Name, err)
 		} else {
-			log.Log("[Weekly] [SUCCESS]", task.Name)
+			log.Log("[WEEKLY] [SUCCESS]", task.Name)
 			config.Weekly[i].LastRun = now
 			config.Changed = true
 		}

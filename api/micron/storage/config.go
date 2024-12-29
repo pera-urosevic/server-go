@@ -56,7 +56,13 @@ func ConfigLoad() error {
 		return err
 	}
 
-	return ConfigParse(data)
+	err = ConfigParse(data)
+	if err != nil {
+		return err
+	}
+	PrintConfig()
+
+	return nil
 }
 
 func ConfigParse(data []byte) error {
@@ -64,8 +70,6 @@ func ConfigParse(data []byte) error {
 	if err != nil {
 		return err
 	}
-
-	PrintConfig()
 
 	Config.Changed = false
 	return nil

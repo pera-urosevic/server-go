@@ -21,7 +21,7 @@ func Routes(r *gin.Engine) *gin.Engine {
 	r.GET("/blog/", func(c *gin.Context) {
 		posts, err := database.GetPosts("")
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		c.JSON(http.StatusOK, posts)
@@ -31,7 +31,7 @@ func Routes(r *gin.Engine) *gin.Engine {
 		filter := c.Param("filter")
 		posts, err := database.GetPosts(filter)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		c.JSON(http.StatusOK, posts)
@@ -44,7 +44,7 @@ func Routes(r *gin.Engine) *gin.Engine {
 		err := app.Start()
 		app.Process.Release()
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		c.JSON(http.StatusOK, nil)
@@ -53,7 +53,7 @@ func Routes(r *gin.Engine) *gin.Engine {
 	r.POST("/blog/post", func(c *gin.Context) {
 		body, err := io.ReadAll(c.Request.Body)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, false)
 			return
 		}
 		type createBody struct {
@@ -62,12 +62,12 @@ func Routes(r *gin.Engine) *gin.Engine {
 		payload := createBody{}
 		err = json.Unmarshal(body, &payload)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, false)
 			return
 		}
 		id, err := database.InsertPost(payload.URL)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		type createResponse struct {
@@ -79,12 +79,12 @@ func Routes(r *gin.Engine) *gin.Engine {
 	r.GET("/blog/post/:postID", func(c *gin.Context) {
 		postID, err := strconv.ParseInt(c.Param("postID"), 10, 64)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, false)
 			return
 		}
 		post, err := database.GetPost(postID)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		c.JSON(http.StatusOK, post)
@@ -93,17 +93,12 @@ func Routes(r *gin.Engine) *gin.Engine {
 	r.PUT("/blog/post/:postID", func(c *gin.Context) {
 		postID, err := strconv.ParseInt(c.Param("postID"), 10, 64)
 		if err != nil {
-			system.GinError(c, err)
-			return
-		}
-		post, err := database.GetPost(postID)
-		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, false)
 			return
 		}
 		body, err := io.ReadAll(c.Request.Body)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, false)
 			return
 		}
 		type updateBody struct {
@@ -117,7 +112,12 @@ func Routes(r *gin.Engine) *gin.Engine {
 		payload := updateBody{}
 		err = json.Unmarshal(body, &payload)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, false)
+			return
+		}
+		post, err := database.GetPost(postID)
+		if err != nil {
+			system.GinError(c, err, true)
 			return
 		}
 		post.URL = payload.URL
@@ -128,7 +128,7 @@ func Routes(r *gin.Engine) *gin.Engine {
 		post.Template = payload.Template
 		err = database.UpdatePost(post)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		c.JSON(http.StatusOK, nil)
@@ -137,22 +137,22 @@ func Routes(r *gin.Engine) *gin.Engine {
 	r.PATCH("/blog/post/:postID", func(c *gin.Context) {
 		postID, err := strconv.ParseInt(c.Param("postID"), 10, 64)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, false)
 			return
 		}
 		post, err := database.GetPost(postID)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		post, err = scraper.Scrape(post)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		err = database.UpdatePost(post)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		c.JSON(http.StatusOK, post)
@@ -161,22 +161,22 @@ func Routes(r *gin.Engine) *gin.Engine {
 	r.DELETE("/blog/post/:postID", func(c *gin.Context) {
 		postID, err := strconv.ParseInt(c.Param("postID"), 10, 64)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, false)
 			return
 		}
 		post, err := database.GetPost(postID)
 		if err != nil {
-			system.GinError(c, err)
-			return
-		}
-		err = database.RemovePost(postID)
-		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
 			return
 		}
 		err = image.Delete(post)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, true)
+			return
+		}
+		err = database.RemovePost(postID)
+		if err != nil {
+			system.GinError(c, err, true)
 			return
 		}
 		c.JSON(http.StatusOK, nil)

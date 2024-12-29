@@ -41,7 +41,7 @@ func Routes(r *gin.Engine) *gin.Engine {
 	r.PUT("/micron/config", func(c *gin.Context) {
 		payload, err := io.ReadAll(c.Request.Body)
 		if err != nil {
-			system.GinError(c, err)
+			system.GinError(c, err, false)
 		}
 		storage.ConfigParse(payload)
 		storage.Config.Changed = true

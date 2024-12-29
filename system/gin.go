@@ -40,6 +40,10 @@ func GinCustom() *gin.Engine {
 	return r
 }
 
-func GinError(c *gin.Context, err error) {
-	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+func GinError(c *gin.Context, err error, internal bool) {
+	if internal {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 }

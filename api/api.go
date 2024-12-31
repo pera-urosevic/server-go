@@ -19,11 +19,15 @@ func Start() {
 	gin.SetMode(mode)
 	gin.ForceConsoleColor()
 
+	host := os.Getenv("API_HOST")
+	if host == "" {
+		host = "0.0.0.0"
+	}
 	port := os.Getenv("API_PORT")
 	if port == "" {
 		port = "55555"
 	}
-	addr := ":" + port
+	addr := host + ":" + port
 
 	system.Log("API", addr)
 	router := system.GinCustom()

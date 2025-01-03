@@ -8,7 +8,7 @@ import (
 )
 
 func flickrUpload(client *flickr.FlickrClient, uploadParams UploadParams) error {
-	system.Log("Uploading: " + uploadParams.Path)
+	system.Log("Uploading", uploadParams.Path)
 
 	client.Init()
 	params := flickr.NewUploadParams()
@@ -22,7 +22,7 @@ func flickrUpload(client *flickr.FlickrClient, uploadParams UploadParams) error 
 	if err != nil {
 		return err
 	} else {
-		system.Log("Uploaded: " + res.ID)
+		system.Log("Uploaded", res.ID)
 	}
 
 	return nil

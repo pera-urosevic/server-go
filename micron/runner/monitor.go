@@ -1,10 +1,10 @@
 package runner
 
 import (
-	"server/api/micron/check"
-	"server/api/micron/execute"
-	"server/api/micron/log"
-	"server/api/micron/types"
+	"server/micron/check"
+	"server/micron/execute"
+	"server/micron/log"
+	"server/micron/types"
 )
 
 func Monitor(config *types.Config) {

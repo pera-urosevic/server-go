@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"server/api/micron/execute"
+	"server/micron/execute"
 )
 
 func Running(app string, re string) bool {

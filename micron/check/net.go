@@ -3,7 +3,7 @@ package check
 import (
 	"net/http"
 	"os"
-	"server/api/micron/log"
+	"server/micron/log"
 	"time"
 )
 

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"os"
 
-	"server/api/micron/log"
-	"server/api/micron/types"
+	"server/micron/log"
+	"server/micron/types"
 )
 
 var Config types.Config

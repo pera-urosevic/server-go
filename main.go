@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 	"server/api"
-	"server/api/micron"
 	"server/env"
+	"server/micron"
 	"server/system"
 )
 

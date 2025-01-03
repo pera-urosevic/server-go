@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"server/api/micron/log"
+	"server/micron/log"
 )
 
 func DayTime(dayTime string, lastRun string) bool {

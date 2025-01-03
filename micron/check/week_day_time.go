@@ -1,7 +1,7 @@
 package check
 
 import (
-	"server/api/micron/log"
+	"server/micron/log"
 	"strconv"
 	"strings"
 	"time"

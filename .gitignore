@@ -4,3 +4,4 @@
 *.ps1
 /tmp
 .favorites.json
+/assets

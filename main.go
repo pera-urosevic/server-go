@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"server/api"
+	"server/charged"
 	"server/env"
 	"server/micron"
 	"server/system"
@@ -24,6 +25,11 @@ func main() {
 	startMicron := os.Getenv("ENABLED_MICRON")
 	if startMicron == "true" {
 		go micron.Start()
+	}
+
+	startCharged := os.Getenv("ENABLED_CHARGED")
+	if startCharged == "true" {
+		go charged.Start()
 	}
 
 	select {}

@@ -17,7 +17,7 @@ func PrintConfig() {
 		if !item.Enabled {
 			name = "# " + name
 		}
-		log.Log("[M]", name)
+		log.Log("[MONITOR]", name)
 	}
 
 	for _, item := range Config.Daily {
@@ -25,7 +25,7 @@ func PrintConfig() {
 		if !item.Enabled {
 			name = "# " + name
 		}
-		log.Log("[D]", name)
+		log.Log("[DAILY]", name)
 	}
 
 	for _, item := range Config.Weekly {
@@ -33,7 +33,7 @@ func PrintConfig() {
 		if !item.Enabled {
 			name = "# " + name
 		}
-		log.Log("[W]", name)
+		log.Log("[WEEKLY]", name)
 	}
 }
 

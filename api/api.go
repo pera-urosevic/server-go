@@ -3,6 +3,7 @@ package api
 import (
 	"os"
 	"server/api/blog"
+	"server/api/cleaner"
 	"server/api/dj"
 	"server/api/gallery"
 	"server/api/micron"
@@ -35,5 +36,6 @@ func Start() {
 	router = dj.Routes(router)
 	router = blog.Routes(router)
 	router = gallery.Routes(router)
+	router = cleaner.Routes(router)
 	router.Run(addr)
 }

@@ -153,5 +153,22 @@ func Routes(r *gin.Engine) *gin.Engine {
 		list(c, record.Path)
 	})
 
+	r.DELETE("/cleaner/delete", func(c *gin.Context) {
+		var record = types.RecordCleaner{}
+		err := c.BindJSON(&record)
+		if err != nil {
+			system.GinError(c, err, false)
+			return
+		}
+
+		err = filesystem.Delete(record)
+		if err != nil {
+			system.GinError(c, err, true)
+			return
+		}
+
+		list(c, record.Path)
+	})
+
 	return r
 }

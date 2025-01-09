@@ -71,6 +71,18 @@ func ConfigParse(data []byte) error {
 		return err
 	}
 
+	if Config.Monitor == nil {
+		Config.Monitor = []types.Monitor{}
+	}
+
+	if Config.Daily == nil {
+		Config.Daily = []types.Daily{}
+	}
+
+	if Config.Weekly == nil {
+		Config.Weekly = []types.Weekly{}
+	}
+
 	Config.Changed = false
 	return nil
 }

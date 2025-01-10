@@ -7,8 +7,3 @@ type Device struct {
 	High    int    `json:"high"`
 	Command string `json:"command"`
 }
-
-type State struct {
-	Time    int      `json:"time"`
-	Devices []Device `json:"devices"`
-}

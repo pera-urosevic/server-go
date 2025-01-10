@@ -22,13 +22,16 @@ func Running(app string, re string) bool {
 		if line == "" {
 			continue
 		}
+
 		if strings.HasPrefix(line, "Get-Process: Cannot find a process") {
 			continue
 		}
+
 		found := regexp.MustCompile("(?i)" + re).MatchString(line)
 		if found {
 			return true
 		}
 	}
+
 	return false
 }

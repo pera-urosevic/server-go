@@ -10,6 +10,7 @@ func ExeDir() string {
 	if err != nil {
 		panic(err)
 	}
+
 	exeDir := filepath.Dir(exe)
 	return exeDir
 }

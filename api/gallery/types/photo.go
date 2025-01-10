@@ -1,18 +1,5 @@
 package types
 
-type Album struct {
-	Path   string
-	Title  string
-	Online bool
-}
-
-type AlbumFile struct {
-	Path     string
-	Album    string
-	Modified int64
-	Online   bool
-}
-
 type Photo struct {
 	ID          int64  `json:"id"`
 	Path        string `json:"path"`

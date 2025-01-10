@@ -34,6 +34,7 @@ func Scrape(post types.Post) (types.Post, error) {
 	if err != nil {
 		return post, err
 	}
+
 	req.Header = http.Header{
 		"User-Agent": {"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"},
 	}
@@ -42,6 +43,7 @@ func Scrape(post types.Post) (types.Post, error) {
 		return post, err
 	}
 	defer res.Body.Close()
+
 	if res.StatusCode != 200 {
 		return post, errors.New("Scrape status: " + res.Status)
 	}
@@ -57,25 +59,31 @@ func Scrape(post types.Post) (types.Post, error) {
 			log.Log(err)
 			continue
 		}
+
 		if !match {
 			continue
 		}
+
 		scraped := scraperMatcher.Scrape(doc)
 		if scraped.Title != "" {
 			post.Title = scraped.Title
 		}
+
 		if scraped.Description != "" {
 			post.Description = scraped.Description
 		}
+
 		if scraped.Image != "" {
 			base, err := url.Parse(post.URL)
 			if err != nil {
 				return post, err
 			}
+
 			imageURL, err := base.Parse(scraped.Image)
 			if err != nil {
 				return post, err
 			}
+
 			post.Image = imageURL.String()
 		}
 	}

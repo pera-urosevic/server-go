@@ -7,6 +7,7 @@ func caches() (string, string, string) {
 	if cachePath == "" {
 		panic("Missing GALLERY_CACHE_PATH")
 	}
+
 	thumbnails := cachePath + "\\thumbnails"
 	previews := cachePath + "\\previews"
 	images := cachePath + "\\images"

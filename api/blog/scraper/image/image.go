@@ -52,6 +52,7 @@ func Fetch(post types.Post) error {
 		return err
 	}
 	defer file.Close()
+
 	_, err = io.Copy(file, res.Body)
 	if err != nil {
 		return err
@@ -91,17 +92,21 @@ func Delete(post types.Post) error {
 	if err != nil {
 		log.Log(err)
 	}
+
 	err = os.Remove(pathThumbnail(post))
 	if err != nil {
 		log.Log(err)
 	}
+
 	err = os.Remove(pathExcerpt(post))
 	if err != nil {
 		log.Log(err)
 	}
+
 	err = os.Remove(pathPost(post))
 	if err != nil {
 		log.Log(err)
 	}
+
 	return nil
 }

@@ -43,8 +43,10 @@ func Start() {
 	if err != nil {
 		interval = 1
 	}
+
 	ticker := time.NewTicker(time.Duration(interval) * time.Second)
 	defer ticker.Stop()
+
 	quit := make(chan struct{})
 	go func() {
 		for {

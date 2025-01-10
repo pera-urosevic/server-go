@@ -52,14 +52,17 @@ func Update(photo types.Photo) (int64, error) {
 	params = datetime(params, photo.Datetime)
 	params = copyright(params, photo.Copyright)
 	params = append(params, photo.Path)
+
 	run := exec.Command("exiftool.exe", params...)
 	_, err := run.CombinedOutput()
 	if err != nil {
 		return 0, err
 	}
+
 	fileInfo, err := os.Stat(photo.Path)
 	if err != nil {
 		return 0, err
 	}
+
 	return fileInfo.ModTime().UnixMilli(), nil
 }

@@ -23,6 +23,7 @@ func configPath() (string, error) {
 	if path == "" {
 		return "", errors.New("config path env not found")
 	}
+
 	return path, nil
 }
 

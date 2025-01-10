@@ -13,6 +13,7 @@ func albums() []types.Album {
 	if data == "" {
 		panic("Missing GALLERY_ALBUMS")
 	}
+
 	albums := []types.Album{}
 	json.Unmarshal([]byte(data), &albums)
 	return albums

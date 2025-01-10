@@ -11,6 +11,7 @@ func flickrUpload(client *flickr.FlickrClient, uploadParams UploadParams) error 
 	system.Log("Uploading", uploadParams.Path)
 
 	client.Init()
+
 	params := flickr.NewUploadParams()
 	params.Title = uploadParams.Title
 	params.Description = uploadParams.Description
@@ -18,6 +19,7 @@ func flickrUpload(client *flickr.FlickrClient, uploadParams UploadParams) error 
 	params.IsPublic = true
 	params.IsFriend = false
 	params.IsFamily = false
+
 	res, err := flickr.UploadFile(client, uploadParams.Path, params)
 	if err != nil {
 		return err

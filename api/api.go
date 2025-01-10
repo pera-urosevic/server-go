@@ -31,11 +31,14 @@ func Start() {
 	addr := host + ":" + port
 
 	system.Log("API", addr)
+
 	router := system.GinCustom()
-	router = micron.Routes(router)
-	router = dj.Routes(router)
-	router = blog.Routes(router)
-	router = gallery.Routes(router)
-	router = cleaner.Routes(router)
+
+	blog.Routes(router)
+	cleaner.Routes(router)
+	dj.Routes(router)
+	gallery.Routes(router)
+	micron.Routes(router)
+
 	router.Run(addr)
 }

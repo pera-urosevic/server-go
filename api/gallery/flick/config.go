@@ -24,6 +24,7 @@ func configPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	return fmt.Sprintf("%s\\flick.json", dirname), nil
 }
 

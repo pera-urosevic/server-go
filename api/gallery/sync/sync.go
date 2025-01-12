@@ -7,7 +7,7 @@ import (
 )
 
 func Sync() ([]types.Photo, error) {
-	log.Log("SYNC", "started")
+	log.Log("[SYNC]", "started")
 	records, err := database.GetPhotos("")
 
 	if err != nil {
@@ -29,6 +29,6 @@ func Sync() ([]types.Photo, error) {
 		return nil, err
 	}
 
-	log.Log("SYNC", "done")
+	log.Log("[SYNC]", "done")
 	return records, nil
 }

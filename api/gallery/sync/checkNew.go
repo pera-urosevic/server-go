@@ -68,7 +68,7 @@ func checkNew(records []types.Photo, files []types.AlbumFile) ([]types.Photo, er
 		}
 
 		if !found {
-			log.Log("ADD", file.Path)
+			log.Log("[ADD]", file.Path)
 			recordNew, err := addRecord(file)
 			if err != nil {
 				return nil, err

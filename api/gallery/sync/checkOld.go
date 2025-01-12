@@ -48,7 +48,7 @@ func checkOld(records []types.Photo, files []types.AlbumFile) ([]types.Photo, er
 		}
 
 		if !found {
-			log.Log("REMOVE", record.Path)
+			log.Log("[REMOVE]", record.Path)
 			err := removeThumbnails(record)
 			if err != nil {
 				return nil, err

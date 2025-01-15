@@ -16,7 +16,7 @@ func GetPhotos(filter string) ([]types.Photo, error) {
 	photos := []types.Photo{}
 	for rows.Next() {
 		photo := types.Photo{}
-		err := rows.Scan(&photo.ID, &photo.Path, &photo.Type, &photo.Modified, &photo.Online, &photo.Album, &photo.Datetime, &photo.Title, &photo.Description, &photo.Keywords, &photo.Copyright)
+		err := rows.Scan(&photo.ID, &photo.Path, &photo.Type, &photo.Modified, &photo.Online, &photo.Album, &photo.Datetime, &photo.Title, &photo.Description, &photo.Keywords, &photo.Copyright, &photo.Flickr, &photo.PixelFed)
 		if err != nil {
 			return nil, err
 		}

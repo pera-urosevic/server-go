@@ -6,6 +6,7 @@ import (
 	"server/api/gallery/flick"
 	"server/system"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,6 +30,9 @@ func Flickr(r *gin.Engine) {
 			system.GinError(c, err, true)
 			return
 		}
+
+		photo.Flickr = time.Now().Format("2006-01-02 15:04:05")
+		database.UpdatePhoto(photo)
 
 		c.JSON(http.StatusOK, res)
 	})

@@ -12,4 +12,6 @@ type Photo struct {
 	Description string `json:"description"`
 	Keywords    string `json:"keywords"`
 	Copyright   string `json:"copyright"`
+	Flickr      string `json:"flickr"`
+	PixelFed    string `json:"pixelfed"`
 }

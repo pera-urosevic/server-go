@@ -10,7 +10,7 @@ func GetPhoto(photoID int64) (types.Photo, error) {
 	defer db.Close()
 	photo := types.Photo{}
 	row := db.QueryRow("SELECT * FROM [gallery] WHERE [id] = ?", photoID)
-	err = row.Scan(&photo.ID, &photo.Path, &photo.Type, &photo.Modified, &photo.Online, &photo.Album, &photo.Datetime, &photo.Title, &photo.Description, &photo.Keywords, &photo.Copyright)
+	err = row.Scan(&photo.ID, &photo.Path, &photo.Type, &photo.Modified, &photo.Online, &photo.Album, &photo.Datetime, &photo.Title, &photo.Description, &photo.Keywords, &photo.Copyright, &photo.Flickr, &photo.PixelFed)
 	if err != nil {
 		return types.Photo{}, err
 	}

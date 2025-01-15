@@ -8,7 +8,7 @@ func AddPhoto(photo types.Photo) (int64, error) {
 		return 0, err
 	}
 	defer db.Close()
-	res, err := db.Exec("INSERT INTO [gallery] ([path], [type], [modified], [online], [album], [datetime], [title], [description], [keywords], [copyright]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", photo.Path, photo.Type, photo.Modified, photo.Online, photo.Album, photo.Datetime, photo.Title, photo.Description, photo.Keywords, photo.Copyright)
+	res, err := db.Exec("INSERT INTO [gallery] ([path], [type], [modified], [online], [album], [datetime], [title], [description], [keywords], [copyright], [flickr], [pixelfed]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", photo.Path, photo.Type, photo.Modified, photo.Online, photo.Album, photo.Datetime, photo.Title, photo.Description, photo.Keywords, photo.Copyright, photo.Flickr, photo.PixelFed)
 	if err != nil {
 		return 0, err
 	}

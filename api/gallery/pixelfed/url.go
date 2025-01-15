@@ -12,6 +12,6 @@ func getURL() (string, error) {
 		return "", errors.New("GALLERY_PIXELFED_SERVER not set")
 	}
 
-	url := fmt.Sprintf("%s/api/v1/media", server)
+	url := fmt.Sprintf("%s/api/v2/media", server)
 	return url, nil
 }

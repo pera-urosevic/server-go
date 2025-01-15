@@ -1,7 +1,10 @@
 package pixelfed
 
 import (
+	"errors"
 	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"server/api/gallery/types"
 	"time"
@@ -29,7 +32,8 @@ func Upload(photo types.Photo) (string, error) {
 	}
 	req.Header.Set("Authorization", bearerToken)
 
-	// --header "Idempotency-Key: $checksum"
+	checksum := getChecksum(photo)
+	req.Header.Set("Idempotency-Key", checksum)
 
 	client := http.Client{
 		Timeout: 2 * time.Minute,
@@ -39,10 +43,18 @@ func Upload(photo types.Photo) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if res.StatusCode != 200 {
+		return "", errors.New("Upload status: " + res.Status)
+	}
 
-	fmt.Println("// DEBUG! res", res)
+	bodyBytes, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	bodyString := string(bodyBytes)
+	fmt.Println(bodyString)
 
-	// TODO! collection
+	// TODO: add to collection
 	// curl --silent --header "Authorization: Bearer $ACCESSTOKEN" -X POST --form "media_ids[]=$media_id" https://$SERVER/api/v1/statuses | jq '.url'
 	return "", nil
 }

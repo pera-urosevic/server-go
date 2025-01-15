@@ -15,4 +15,5 @@ func Routes(r *gin.Engine) {
 	controller.GetPhoto(r)
 	controller.UpdatePhoto(r)
 	controller.Flickr(r)
+	controller.Pixelfed(r)
 }

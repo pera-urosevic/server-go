@@ -8,12 +8,9 @@ import (
 
 func Routes(r *gin.Engine) {
 	controller.GetGallery(r)
-	controller.GetGalleryFiltered(r)
 	controller.Sync(r)
 	controller.Deploy(r)
 	controller.OpenPhoto(r)
 	controller.GetPhoto(r)
 	controller.UpdatePhoto(r)
-	controller.Flickr(r)
-	controller.Pixelfed(r)
 }

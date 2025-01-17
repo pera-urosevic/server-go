@@ -4,15 +4,24 @@ import (
 	"net/http"
 	"server/api/gallery/database"
 	"server/system"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetGallery(r *gin.Engine) {
-	r.GET("/gallery/", func(c *gin.Context) {
-		photos, err := database.GetPhotos("")
+	r.GET("/gallery/:sort/*filter", func(c *gin.Context) {
+		sort := c.Param("sort")
+		sort = strings.ToLower(sort)
+		if (sort != "asc") && (sort != "desc") {
+			sort = "desc"
+		}
+
+		filter := c.Param("filter")[1:]
+
+		photos, err := database.GetPhotos(filter, sort)
 		if err != nil {
-			system.GinError(c, err, true)
+			system.GinError(c, err, false)
 			return
 		}
 

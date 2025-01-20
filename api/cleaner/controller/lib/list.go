@@ -23,7 +23,7 @@ func List(c *gin.Context, path string) {
 
 	for i, entry := range entries {
 		for _, record := range records {
-			if entry.Name == record.Name {
+			if entry.Name == record.Name && path == record.Path {
 				entries[i].OK = true
 			}
 		}

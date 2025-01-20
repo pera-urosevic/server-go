@@ -15,4 +15,5 @@ func Routes(r *gin.Engine) {
 	controller.AddPath(r)
 	controller.RemovePath(r)
 	controller.DeleteEntry(r)
+	controller.GetUnknown(r)
 }

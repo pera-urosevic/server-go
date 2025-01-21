@@ -1,10 +1,14 @@
 package database
 
-import "server/api/blog/types"
+import (
+	"server/api/blog/log"
+	"server/api/blog/types"
+)
 
 func GetPosts(filter string) ([]types.Post, error) {
 	db, err := Database()
 	if err != nil {
+		log.Log(err)
 		return nil, err
 	}
 	defer db.Close()
@@ -12,6 +16,7 @@ func GetPosts(filter string) ([]types.Post, error) {
 	f := "%" + filter + "%"
 	rows, err := db.Query("SELECT * FROM [blog] WHERE [url] LIKE ? OR [title] LIKE ? OR [description] LIKE ? ORDER BY [timestamp] DESC", f, f, f)
 	if err != nil {
+		log.Log(err)
 		return nil, err
 	}
 
@@ -20,6 +25,7 @@ func GetPosts(filter string) ([]types.Post, error) {
 		post := types.Post{}
 		err := rows.Scan(&post.ID, &post.Timestamp, &post.Title, &post.Category, &post.Template, &post.Description, &post.Image, &post.URL)
 		if err != nil {
+			log.Log(err)
 			return nil, err
 		}
 

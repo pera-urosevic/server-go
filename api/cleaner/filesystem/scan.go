@@ -2,6 +2,7 @@ package filesystem
 
 import (
 	"os"
+	"server/api/cleaner/log"
 	"server/api/cleaner/types"
 )
 
@@ -14,6 +15,7 @@ func Scan(path string) ([]types.Entry, error) {
 
 	items, err := os.ReadDir(scanPath)
 	if err != nil {
+		log.Log(err)
 		return nil, err
 	}
 
@@ -22,6 +24,7 @@ func Scan(path string) ([]types.Entry, error) {
 
 		stats, err := os.Stat(scanPath + "/" + item.Name())
 		if err != nil {
+			log.Log(err)
 			return nil, err
 		}
 

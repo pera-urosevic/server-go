@@ -20,5 +20,8 @@ func Delete(record types.RecordCleaner) error {
 
 	run := exec.Command(cmd, args...)
 	_, err := run.CombinedOutput()
+	if err != nil {
+		log.Log(err)
+	}
 	return err
 }

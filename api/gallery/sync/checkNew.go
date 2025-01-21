@@ -13,11 +13,13 @@ import (
 func addRecord(file types.AlbumFile) (types.Photo, error) {
 	record, err := readMeta(file)
 	if err != nil {
+		log.Log(err)
 		return record, err
 	}
 
 	id, err := database.AddPhoto(record)
 	if err != nil {
+		log.Log(err)
 		return record, err
 	}
 
@@ -28,6 +30,7 @@ func addRecord(file types.AlbumFile) (types.Photo, error) {
 func addThumbnails(record types.Photo) error {
 	original, err := imaging.Open(record.Path)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
@@ -36,6 +39,7 @@ func addThumbnails(record types.Photo) error {
 	imagePath := fmt.Sprintf("%s\\%s", places.ImagesCache, filename)
 	err = imaging.Save(image, imagePath, imaging.JPEGQuality(75))
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
@@ -43,6 +47,7 @@ func addThumbnails(record types.Photo) error {
 	previewPath := fmt.Sprintf("%s\\%s", places.PreviewsCache, filename)
 	err = imaging.Save(preview, previewPath, imaging.JPEGQuality(75))
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
@@ -50,6 +55,7 @@ func addThumbnails(record types.Photo) error {
 	thumbnailPath := fmt.Sprintf("%s\\%s", places.ThumbnailsCache, filename)
 	err = imaging.Save(thumbnail, thumbnailPath, imaging.JPEGQuality(75))
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
@@ -71,11 +77,13 @@ func checkNew(records []types.Photo, files []types.AlbumFile) ([]types.Photo, er
 			log.Log("[ADD]", file.Path)
 			recordNew, err := addRecord(file)
 			if err != nil {
+				log.Log(err)
 				return nil, err
 			}
 
 			err = addThumbnails(recordNew)
 			if err != nil {
+				log.Log(err)
 				return nil, err
 			}
 

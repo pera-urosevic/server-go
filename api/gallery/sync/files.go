@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"server/api/gallery/log"
 	"server/api/gallery/places"
 	"server/api/gallery/types"
 )
@@ -22,6 +23,7 @@ func scanFiles() ([]types.AlbumFile, error) {
 	home, err := os.UserHomeDir()
 
 	if err != nil {
+		log.Log(err)
 		return nil, err
 	}
 
@@ -29,12 +31,14 @@ func scanFiles() ([]types.AlbumFile, error) {
 		absolutePath := filepath.Join(home, album.Path)
 		entry, err := os.ReadDir(absolutePath)
 		if err != nil {
+			log.Log(err)
 			return nil, err
 		}
 
 		for _, file := range entry {
 			info, err := file.Info()
 			if err != nil {
+				log.Log(err)
 				return nil, err
 			}
 

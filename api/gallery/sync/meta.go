@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os/exec"
 	"reflect"
+	"server/api/gallery/log"
 	"server/api/gallery/types"
 	"strings"
 	"time"
@@ -79,6 +80,7 @@ func readMeta(file types.AlbumFile) (types.Photo, error) {
 	run := exec.Command("exiftool.exe", "-json", file.Path)
 	output, err := run.CombinedOutput()
 	if err != nil {
+		log.Log(err)
 		return types.Photo{}, err
 	}
 

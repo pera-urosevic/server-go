@@ -38,10 +38,12 @@ func pathPost(post types.Post) string {
 func Fetch(post types.Post) error {
 	res, err := http.Get(post.Image)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
+		log.Log(err)
 		return err
 	}
 
@@ -49,17 +51,20 @@ func Fetch(post types.Post) error {
 
 	file, err := os.Create(originalPath)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 	defer file.Close()
 
 	_, err = io.Copy(file, res.Body)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
 	imageOriginal, err := imaging.Open(originalPath)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 

@@ -18,5 +18,8 @@ func Net() bool {
 		Timeout: 2 * time.Second,
 	}
 	_, err := client.Head(url)
+	if err != nil {
+		log.Log(err)
+	}
 	return err == nil
 }

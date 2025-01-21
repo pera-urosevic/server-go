@@ -21,6 +21,7 @@ func printConfig() {
 func configPath() (string, error) {
 	path := os.Getenv("CHARGED_CONFIG_PATH")
 	if path == "" {
+		log.Log("config path env not found")
 		return "", errors.New("config path env not found")
 	}
 
@@ -30,6 +31,7 @@ func configPath() (string, error) {
 func configParse(data []byte) error {
 	err := json.Unmarshal(data, &_state)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
@@ -39,16 +41,19 @@ func configParse(data []byte) error {
 func Load() error {
 	path, err := configPath()
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
 	data, err := os.ReadFile(path)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
 	err = configParse(data)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 	printConfig()

@@ -32,6 +32,7 @@ func Scrape(post types.Post) (types.Post, error) {
 	client := http.Client{}
 	req, err := http.NewRequest("GET", post.URL, nil)
 	if err != nil {
+		log.Log(err)
 		return post, err
 	}
 
@@ -40,16 +41,19 @@ func Scrape(post types.Post) (types.Post, error) {
 	}
 	res, err := client.Do(req)
 	if err != nil {
+		log.Log(err)
 		return post, err
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode != 200 {
+		log.Log(err)
 		return post, errors.New("Scrape status: " + res.Status)
 	}
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
+		log.Log(err)
 		return post, err
 	}
 

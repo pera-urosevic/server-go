@@ -2,6 +2,7 @@ package filesystem
 
 import (
 	"os"
+	"server/api/cleaner/log"
 	"server/api/cleaner/types"
 	"strings"
 )
@@ -26,6 +27,7 @@ func Unknown(known []types.RecordCleaner, scanPath string) ([]types.Node, error)
 	items, err := os.ReadDir(scanPath)
 	if err != nil {
 		if !strings.HasSuffix(err.Error(), ": Access is denied.") {
+			log.Log(err)
 			return nil, err
 		}
 	}
@@ -41,6 +43,7 @@ func Unknown(known []types.RecordCleaner, scanPath string) ([]types.Node, error)
 
 		stats, err := os.Stat(scanPath + "/" + item.Name())
 		if err != nil {
+			log.Log(err)
 			return nil, err
 		}
 
@@ -57,6 +60,7 @@ func Unknown(known []types.RecordCleaner, scanPath string) ([]types.Node, error)
 		entry.Modified = stats.ModTime().Format("2006-01-02 15:04:05")
 
 		if err != nil {
+			log.Log(err)
 			return nil, err
 		}
 

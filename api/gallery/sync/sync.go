@@ -11,21 +11,25 @@ func Sync() ([]types.Photo, error) {
 	records, err := database.GetPhotos("", "desc")
 
 	if err != nil {
+		log.Log(err)
 		return nil, err
 	}
 
 	files, err := scanFiles()
 	if err != nil {
+		log.Log(err)
 		return nil, err
 	}
 
 	records, err = checkOld(records, files)
 	if err != nil {
+		log.Log(err)
 		return nil, err
 	}
 
 	records, err = checkNew(records, files)
 	if err != nil {
+		log.Log(err)
 		return nil, err
 	}
 

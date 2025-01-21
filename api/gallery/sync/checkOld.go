@@ -13,16 +13,19 @@ func removeThumbnails(record types.Photo) error {
 	filename := fmt.Sprintf("%s - %s.%s", record.Album, record.Datetime, record.Type)
 	err := os.Remove(fmt.Sprintf("%s\\%s", places.ImagesCache, filename))
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
 	err = os.Remove(fmt.Sprintf("%s\\%s", places.PreviewsCache, filename))
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
 	err = os.Remove(fmt.Sprintf("%s\\%s", places.ThumbnailsCache, filename))
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
@@ -31,6 +34,7 @@ func removeThumbnails(record types.Photo) error {
 
 func removeDB(photo types.Photo) error {
 	err := database.RemovePhoto(photo.ID)
+	log.Log(err)
 	return err
 }
 
@@ -51,11 +55,13 @@ func checkOld(records []types.Photo, files []types.AlbumFile) ([]types.Photo, er
 			log.Log("[REMOVE]", record.Path)
 			err := removeThumbnails(record)
 			if err != nil {
+				log.Log(err)
 				return nil, err
 			}
 
 			err = removeDB(record)
 			if err != nil {
+				log.Log(err)
 				return nil, err
 			}
 		}

@@ -40,6 +40,7 @@ func PrintConfig() {
 func configPath() (string, error) {
 	path := os.Getenv("MICRON_CONFIG_PATH")
 	if path == "" {
+		log.Log("config path env not found")
 		return "", errors.New("config path env not found")
 	}
 	return path, nil
@@ -48,16 +49,19 @@ func configPath() (string, error) {
 func ConfigLoad() error {
 	path, err := configPath()
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
 	data, err := os.ReadFile(path)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
 	err = ConfigParse(data)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 	PrintConfig()
@@ -68,6 +72,7 @@ func ConfigLoad() error {
 func ConfigParse(data []byte) error {
 	err := json.Unmarshal(data, &Config)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
@@ -94,16 +99,19 @@ func ConfigSave() error {
 
 	path, err := configPath()
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
 	data, err := json.MarshalIndent(Config, "", "  ")
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 
 	err = os.WriteFile(path, data, 0644)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 

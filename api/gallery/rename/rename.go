@@ -3,6 +3,7 @@ package rename
 import (
 	"os"
 	"path/filepath"
+	"server/api/gallery/log"
 	"server/api/gallery/types"
 )
 
@@ -13,6 +14,7 @@ func Rename(photoOriginal types.Photo, photo types.Photo) (string, error) {
 	if oldPath != newPath {
 		err := os.Rename(oldPath, newPath)
 		if err != nil {
+			log.Log(err)
 			return photoOriginal.Path, err
 		}
 

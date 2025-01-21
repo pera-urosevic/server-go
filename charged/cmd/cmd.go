@@ -20,6 +20,5 @@ func Run(cmdline string) (string, error) {
 	}
 
 	result := strings.Trim(string(cmd_output), "\r\n")
-	log.Log(err)
-	return result, err
+	return result, nil
 }

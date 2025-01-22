@@ -19,7 +19,8 @@ func WithDetach(cmd string, args []string) error {
 	err := app.Start()
 	if err == nil {
 		app.Process.Release()
+	} else {
+		log.Log(err)
 	}
-	log.Log(err)
 	return err
 }

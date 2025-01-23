@@ -8,7 +8,7 @@ import (
 
 func Sync() ([]model.Photo, error) {
 	log.Log("[SYNC]", "started")
-	records, err := database.GetPhotos("", "desc")
+	records, err := database.GetPhotos("", "desc", false)
 
 	if err != nil {
 		log.Log(err)

@@ -5,16 +5,23 @@ import (
 	"server/api/gallery/log"
 )
 
-func GetPhotos(filter string, sort string) ([]model.Photo, error) {
+func GetPhotos(filter string, sort string, pixelfedUpload bool) ([]model.Photo, error) {
 	db, err := Database()
 	if err != nil {
 		log.Log(err)
 		return nil, err
 	}
 
-	f := "%" + filter + "%"
 	photos := []model.Photo{}
-	res := db.Where("album LIKE ? OR datetime LIKE ? OR title LIKE ? OR description LIKE ? OR keywords LIKE ?", f, f, f, f, f).Order("datetime " + sort).Find(&photos)
+
+	where := "(album LIKE ? OR datetime LIKE ? OR title LIKE ? OR description LIKE ? OR keywords LIKE ?)"
+	if pixelfedUpload {
+		where += "AND (pixelfed = '' OR pixelfed IS NULL) AND (online = 1)"
+	}
+
+	f := "%" + filter + "%"
+
+	res := db.Where(where, f, f, f, f, f).Order("datetime " + sort).Find(&photos)
 	if res.Error != nil {
 		log.Log(res.Error)
 		return nil, res.Error

@@ -6,9 +6,9 @@ import (
 	"io"
 	"net/http"
 	"server/api/gallery/database"
+	"server/api/gallery/database/model"
 	"server/api/gallery/meta"
 	"server/api/gallery/rename"
-	"server/api/gallery/types"
 	"server/system"
 	"strconv"
 
@@ -35,7 +35,7 @@ func UpdatePhoto(r *gin.Engine) {
 			return
 		}
 
-		var photoNew types.Photo
+		var photoNew model.Photo
 		err = json.Unmarshal(body, &photoNew)
 		if err != nil {
 			system.GinError(c, err, true)

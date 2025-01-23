@@ -2,11 +2,11 @@ package sync
 
 import (
 	"server/api/gallery/database"
+	"server/api/gallery/database/model"
 	"server/api/gallery/log"
-	"server/api/gallery/types"
 )
 
-func Sync() ([]types.Photo, error) {
+func Sync() ([]model.Photo, error) {
 	log.Log("[SYNC]", "started")
 	records, err := database.GetPhotos("", "desc")
 

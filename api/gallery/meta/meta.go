@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"server/api/gallery/types"
+	"server/api/gallery/database/model"
 	"strings"
 )
 
@@ -44,7 +44,7 @@ func copyright(params []string, copyright string) []string {
 	return params
 }
 
-func Update(photo types.Photo) (int64, error) {
+func Update(photo model.Photo) (int64, error) {
 	params := []string{"-m", "-overwrite_original", "-XMP=", "-Orientation=", "-gps:all="}
 	params = title(params, photo.Title)
 	params = description(params, photo.Description)

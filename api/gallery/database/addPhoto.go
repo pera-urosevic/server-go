@@ -1,29 +1,22 @@
 package database
 
 import (
+	"server/api/gallery/database/model"
 	"server/api/gallery/log"
-	"server/api/gallery/types"
 )
 
-func AddPhoto(photo types.Photo) (int64, error) {
+func AddPhoto(photo model.Photo) (int64, error) {
 	db, err := Database()
 	if err != nil {
 		log.Log(err)
 		return 0, err
 	}
-	defer db.Close()
 
-	res, err := db.Exec("INSERT INTO [gallery] ([path], [type], [modified], [online], [album], [datetime], [title], [description], [keywords], [copyright], [flickr], [pixelfed]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", photo.Path, photo.Type, photo.Modified, photo.Online, photo.Album, photo.Datetime, photo.Title, photo.Description, photo.Keywords, photo.Copyright, photo.Flickr, photo.PixelFed)
-	if err != nil {
-		log.Log(err)
-		return 0, err
+	res := db.Create(&photo)
+	if res.Error != nil {
+		log.Log(res.Error)
+		return 0, res.Error
 	}
 
-	id, err := res.LastInsertId()
-	if err != nil {
-		log.Log(err)
-		return 0, err
-	}
-
-	return id, nil
+	return photo.ID, nil
 }

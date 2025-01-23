@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os/exec"
 	"reflect"
+	"server/api/gallery/database/model"
 	"server/api/gallery/log"
 	"server/api/gallery/types"
 	"strings"
@@ -76,19 +77,19 @@ func metaCopyright(exif map[string]interface{}) string {
 	return ""
 }
 
-func readMeta(file types.AlbumFile) (types.Photo, error) {
+func readMeta(file types.AlbumFile) (model.Photo, error) {
 	run := exec.Command("exiftool.exe", "-json", file.Path)
 	output, err := run.CombinedOutput()
 	if err != nil {
 		log.Log(err)
-		return types.Photo{}, err
+		return model.Photo{}, err
 	}
 
 	results := []map[string]interface{}{}
 	json.Unmarshal(output, &results)
 	exif := results[0]
 
-	record := types.Photo{
+	record := model.Photo{
 		Path:        file.Path,
 		Album:       file.Album,
 		Modified:    file.Modified,

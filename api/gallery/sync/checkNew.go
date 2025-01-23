@@ -3,6 +3,7 @@ package sync
 import (
 	"fmt"
 	"server/api/gallery/database"
+	"server/api/gallery/database/model"
 	"server/api/gallery/log"
 	"server/api/gallery/places"
 	"server/api/gallery/types"
@@ -10,7 +11,7 @@ import (
 	"github.com/disintegration/imaging"
 )
 
-func addRecord(file types.AlbumFile) (types.Photo, error) {
+func addRecord(file types.AlbumFile) (model.Photo, error) {
 	record, err := readMeta(file)
 	if err != nil {
 		log.Log(err)
@@ -27,7 +28,7 @@ func addRecord(file types.AlbumFile) (types.Photo, error) {
 	return record, nil
 }
 
-func addThumbnails(record types.Photo) error {
+func addThumbnails(record model.Photo) error {
 	original, err := imaging.Open(record.Path)
 	if err != nil {
 		log.Log(err)
@@ -62,7 +63,7 @@ func addThumbnails(record types.Photo) error {
 	return nil
 }
 
-func checkNew(records []types.Photo, files []types.AlbumFile) ([]types.Photo, error) {
+func checkNew(records []model.Photo, files []types.AlbumFile) ([]model.Photo, error) {
 	for _, file := range files {
 		found := false
 

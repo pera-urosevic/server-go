@@ -1,23 +1,23 @@
 package database
 
 import (
+	"server/api/gallery/database/model"
 	"server/api/gallery/log"
-	"server/api/gallery/types"
 )
 
-func GetPhoto(photoID int64) (types.Photo, error) {
+func GetPhoto(photoID int64) (model.Photo, error) {
 	db, err := Database()
 	if err != nil {
 		log.Log(err)
-		return types.Photo{}, err
+		return model.Photo{}, err
 	}
-	defer db.Close()
-	photo := types.Photo{}
-	row := db.QueryRow("SELECT * FROM [gallery] WHERE [id] = ?", photoID)
-	err = row.Scan(&photo.ID, &photo.Path, &photo.Type, &photo.Modified, &photo.Online, &photo.Album, &photo.Datetime, &photo.Title, &photo.Description, &photo.Keywords, &photo.Copyright, &photo.Flickr, &photo.PixelFed)
-	if err != nil {
-		log.Log(err)
-		return types.Photo{}, err
+
+	photo := model.Photo{}
+	res := db.First(&photo, photoID)
+	if res.Error != nil {
+		log.Log(res.Error)
+		return model.Photo{}, res.Error
 	}
+
 	return photo, nil
 }

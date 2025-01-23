@@ -1,14 +1,15 @@
 package database
 
 import (
-	"database/sql"
 	"os"
 
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 	_ "modernc.org/sqlite"
 )
 
-func Database() (*sql.DB, error) {
+func Database() (*gorm.DB, error) {
 	dbPath := os.Getenv("GALLERY_DB_PATH")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	return db, err
 }

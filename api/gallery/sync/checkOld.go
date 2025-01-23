@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 	"server/api/gallery/database"
+	"server/api/gallery/database/model"
 	"server/api/gallery/log"
 	"server/api/gallery/places"
 	"server/api/gallery/types"
 )
 
-func removeThumbnails(record types.Photo) error {
+func removeThumbnails(record model.Photo) error {
 	filename := fmt.Sprintf("%s - %s.%s", record.Album, record.Datetime, record.Type)
 	err := os.Remove(fmt.Sprintf("%s\\%s", places.ImagesCache, filename))
 	if err != nil {
@@ -32,14 +33,14 @@ func removeThumbnails(record types.Photo) error {
 	return nil
 }
 
-func removeDB(photo types.Photo) error {
+func removeDB(photo model.Photo) error {
 	err := database.RemovePhoto(photo.ID)
 	log.Log(err)
 	return err
 }
 
-func checkOld(records []types.Photo, files []types.AlbumFile) ([]types.Photo, error) {
-	checked := []types.Photo{}
+func checkOld(records []model.Photo, files []types.AlbumFile) ([]model.Photo, error) {
+	checked := []model.Photo{}
 	for _, record := range records {
 
 		found := false

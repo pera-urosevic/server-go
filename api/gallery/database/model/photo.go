@@ -1,4 +1,12 @@
-package types
+package model
+
+type Tabler interface {
+	TableName() string
+}
+
+func (Photo) TableName() string {
+	return "gallery"
+}
 
 type Photo struct {
 	ID          int64  `json:"id"`
@@ -12,6 +20,5 @@ type Photo struct {
 	Description string `json:"description"`
 	Keywords    string `json:"keywords"`
 	Copyright   string `json:"copyright"`
-	Flickr      string `json:"flickr"`
-	PixelFed    string `json:"pixelfed"`
+	Pixelfed    string `json:"pixelfed"`
 }

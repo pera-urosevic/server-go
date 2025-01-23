@@ -3,11 +3,11 @@ package rename
 import (
 	"os"
 	"path/filepath"
+	"server/api/gallery/database/model"
 	"server/api/gallery/log"
-	"server/api/gallery/types"
 )
 
-func Rename(photoOriginal types.Photo, photo types.Photo) (string, error) {
+func Rename(photoOriginal model.Photo, photo model.Photo) (string, error) {
 	oldPath := photoOriginal.Path
 	newPath := filepath.Dir(photoOriginal.Path) + "\\" + photo.Datetime + " - " + photo.Title + "." + photo.Type
 

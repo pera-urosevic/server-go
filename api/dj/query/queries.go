@@ -2,30 +2,23 @@ package query
 
 import (
 	"server/api/dj/database"
-	"server/api/dj/types"
+	"server/api/dj/database/model"
+	"server/api/dj/log"
 )
 
-func Queries() map[string]string {
+func Queries() ([]model.Query, error) {
 	db, err := database.Database()
 	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT name, query FROM queries")
-	if err != nil {
-		panic(err)
+		log.Log(err)
+		return nil, err
 	}
 
-	queries := make(map[string]string)
-	for rows.Next() {
-		result := types.RecordQuery{}
-		err := rows.Scan(&result.Name, &result.Query)
-		if err != nil {
-			panic(err)
-		}
-		queries[result.Name] = result.Query
+	queries := []model.Query{}
+	res := db.Find(&queries)
+	if res.Error != nil {
+		log.Log(res.Error)
+		return nil, res.Error
 	}
 
-	return queries
+	return queries, nil
 }

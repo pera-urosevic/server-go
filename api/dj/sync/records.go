@@ -1,38 +1,32 @@
 package sync
 
 import (
-	"database/sql"
 	"encoding/json"
+	"server/api/dj/database/model"
 	"server/api/dj/filesystem"
-	"server/api/dj/types"
+	"server/api/dj/log"
+
+	"gorm.io/gorm"
 )
 
-func getRecords(db *sql.DB) []types.RecordSong {
-	rows, err := db.Query("SELECT path, datetime FROM songs")
-	if err != nil {
-		panic(err)
+func getRecords(db *gorm.DB) ([]model.Song, error) {
+	records := []model.Song{}
+	res := db.Find(&records)
+	if res.Error != nil {
+		log.Log(res.Error)
+		return nil, res.Error
 	}
 
-	records := []types.RecordSong{}
-	for rows.Next() {
-		record := types.RecordSong{}
-		err := rows.Scan(&record.Path, &record.Datetime)
-		if err != nil {
-			panic(err)
-		}
-		records = append(records, record)
-	}
-
-	return records
+	return records, nil
 }
 
-func removeRecords(db *sql.DB, records []types.RecordSong, files []types.RecordSong) ([]types.RecordSong, []string) {
+func removeRecords(db *gorm.DB, records []model.Song, files []model.Song) ([]model.Song, []string, error) {
 	removed := []string{}
-	foundRecords := []types.RecordSong{}
+	foundRecords := []model.Song{}
 	for _, record := range records {
 		found := false
 		for _, file := range files {
-			if record.Path == file.Path && record.Datetime == file.Datetime {
+			if record.Path == file.Path && record.Datetime.Equal(file.Datetime) {
 				found = true
 				break
 			}
@@ -41,18 +35,20 @@ func removeRecords(db *sql.DB, records []types.RecordSong, files []types.RecordS
 			foundRecords = append(foundRecords, record)
 		} else {
 			removed = append(removed, record.Path)
-			_, err := db.Exec("DELETE FROM [songs] WHERE [path] = ?", record.Path)
-			if err != nil {
-				panic(err)
+			res := db.Where("path = ?", record.Path).Delete(&model.Song{})
+			if res.Error != nil {
+				log.Log(res.Error)
+				return nil, nil, res.Error
 			}
 		}
 	}
-	return foundRecords, removed
+	return foundRecords, removed, nil
 }
 
-func addRecords(db *sql.DB, records []types.RecordSong, files []types.RecordSong) ([]types.RecordSong, []string) {
+func addRecords(db *gorm.DB, records []model.Song, files []model.Song) ([]model.Song, []string, error) {
 	added := []string{}
 	for _, file := range files {
+
 		found := false
 		for _, record := range records {
 			if record.Path == file.Path {
@@ -60,19 +56,31 @@ func addRecords(db *sql.DB, records []types.RecordSong, files []types.RecordSong
 				break
 			}
 		}
+
 		if !found {
 			added = append(added, file.Path)
-			file.Meta = filesystem.ReadMeta(file.Path)
-			jsonMeta, err := json.Marshal(file.Meta)
+
+			meta, err := filesystem.ReadMeta(file.Path)
 			if err != nil {
-				panic(err)
+				log.Log(err)
+				return nil, nil, err
 			}
-			_, err = db.Exec("INSERT INTO [songs] ([path], [meta], [datetime]) VALUES (?, ?, ?)", file.Path, string(jsonMeta), file.Datetime)
+
+			jsonMeta, err := json.Marshal(meta)
 			if err != nil {
-				panic(err)
+				log.Log(err)
+				return nil, nil, err
 			}
+
+			song := model.Song{Path: file.Path, Meta: string(jsonMeta), Datetime: file.Datetime}
+			res := db.Create(&song)
+			if res.Error != nil {
+				log.Log(res.Error)
+				return nil, nil, res.Error
+			}
+
 			records = append(records, file)
 		}
 	}
-	return records, added
+	return records, added, nil
 }

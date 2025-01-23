@@ -1,13 +1,17 @@
 package database
 
-import "database/sql"
+import (
+	"server/api/dj/database/model"
 
-func GetQuery(db *sql.DB, name string) string {
-	var query string
-	row := db.QueryRow("SELECT query FROM queries WHERE name = ?", name)
-	err := row.Scan(&query)
-	if err != nil {
-		return name
+	"gorm.io/gorm"
+)
+
+func GetQuery(db *gorm.DB, name string) (model.Query, error) {
+	query := model.Query{}
+	res := db.Where("name = ?", name).First(&query)
+	if res.Error != nil {
+		return query, res.Error
 	}
-	return query
+
+	return query, nil
 }

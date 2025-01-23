@@ -3,22 +3,28 @@ package filesystem
 import (
 	"os"
 	"path/filepath"
-	"server/api/dj/types"
+	"server/api/dj/database/model"
+	"server/api/dj/log"
 	"strings"
 )
 
-func GetFiles(path string) []types.RecordSong {
-	files := []types.RecordSong{}
+func GetFiles(path string) ([]model.Song, error) {
+	files := []model.Song{}
 
 	entries, err := os.ReadDir(path)
 	if err != nil {
-		panic(err)
+		log.Log(err)
+		return nil, err
 	}
 
 	for _, entry := range entries {
 		if entry.IsDir() {
 			subdirPath := filepath.Join(path, entry.Name())
-			subdirFiles := GetFiles(subdirPath)
+			subdirFiles, err := GetFiles(subdirPath)
+			if err != nil {
+				log.Log(err)
+				return nil, err
+			}
 			files = append(files, subdirFiles...)
 		}
 
@@ -29,14 +35,15 @@ func GetFiles(path string) []types.RecordSong {
 		p := filepath.Join(path, entry.Name())
 		stats, err := os.Stat(p)
 		if err != nil {
-			panic(err)
+			log.Log(err)
+			return nil, err
 		}
 
 		path := p
 		datetime := stats.ModTime()
-		file := types.RecordSong{Path: path, Datetime: datetime}
+		file := model.Song{Path: path, Datetime: datetime}
 		files = append(files, file)
 	}
 
-	return files
+	return files, nil
 }

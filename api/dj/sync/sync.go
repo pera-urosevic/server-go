@@ -7,18 +7,37 @@ import (
 	"server/api/dj/log"
 )
 
-func Sync() map[string][]string {
+func Sync() (map[string][]string, error) {
 	db, err := database.Database()
 	if err != nil {
-		panic(err)
+		log.Log(err)
+		return nil, err
 	}
-	defer db.Close()
 
 	musicPath := os.Getenv("DJ_MUSIC_PATH")
-	files := filesystem.GetFiles(musicPath)
-	records := getRecords(db)
-	records, removed := removeRecords(db, records, files)
-	records, added := addRecords(db, records, files)
+	files, err := filesystem.GetFiles(musicPath)
+	if err != nil {
+		log.Log(err)
+		return nil, err
+	}
+
+	records, err := getRecords(db)
+	if err != nil {
+		log.Log(err)
+		return nil, err
+	}
+
+	records, removed, err := removeRecords(db, records, files)
+	if err != nil {
+		log.Log(err)
+		return nil, err
+	}
+
+	records, added, err := addRecords(db, records, files)
+	if err != nil {
+		log.Log(err)
+		return nil, err
+	}
 
 	if len(records) == 0 {
 		log.Log("Synced to empty")
@@ -28,5 +47,5 @@ func Sync() map[string][]string {
 		"removed": removed,
 		"added":   added,
 	}
-	return res
+	return res, nil
 }

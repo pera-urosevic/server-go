@@ -2,6 +2,7 @@ package filesystem
 
 import (
 	"os"
+	"server/api/dj/log"
 	"strings"
 
 	"github.com/dhowden/tag"
@@ -93,16 +94,17 @@ import (
 // WXXX - User defined URL link frame
 // cspell:enable
 
-func ReadMeta(path string) map[string]interface{} {
+func ReadMeta(path string) (map[string]interface{}, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		panic(err)
+		log.Log(err)
+		return nil, err
 	}
 	defer file.Close()
 
 	tags, err := tag.ReadFrom(file)
 	if err != nil {
-		return map[string]interface{}{}
+		return nil, err
 	}
 
 	meta := tags.Raw()
@@ -112,5 +114,6 @@ func ReadMeta(path string) map[string]interface{} {
 			v.(*tag.Picture).Data = []byte{0, 1, 2, 3}
 		}
 	}
-	return meta
+
+	return meta, nil
 }

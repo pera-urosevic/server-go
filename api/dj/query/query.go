@@ -3,34 +3,40 @@ package query
 import (
 	"encoding/json"
 	"server/api/dj/database"
+	"server/api/dj/log"
 	"server/api/dj/types"
 )
 
-func Query(q string) []types.RecordQueryResult {
+func Query(q string) ([]types.QueryResult, error) {
 	db, err := database.Database()
 	if err != nil {
-		panic(err)
+		log.Log(err)
+		return nil, err
 	}
-	defer db.Close()
 
-	sql := database.GetQuery(db, q)
-
-	rows, err := db.Query(sql)
+	query, err := database.GetQuery(db, q)
 	if err != nil {
-		panic(err)
+		log.Log(err)
+		return nil, err
 	}
 
-	results := []types.RecordQueryResult{}
-	for rows.Next() {
-		result := types.RecordQueryResult{}
-		var metaJson string
-		err := rows.Scan(&result.Query, &result.Path, &metaJson, &result.Datetime)
-		json.Unmarshal([]byte(metaJson), &result.Meta)
-		if err != nil {
-			panic(err)
+	resultsRaw := []types.QueryResultRaw{}
+	res := db.Raw(query.Query).Scan(&resultsRaw)
+	if res.Error != nil {
+		log.Log(res.Error)
+		return nil, res.Error
+	}
+
+	results := []types.QueryResult{}
+	for _, resultRaw := range resultsRaw {
+		result := types.QueryResult{
+			Query:    resultRaw.Query,
+			Path:     resultRaw.Path,
+			Datetime: resultRaw.Datetime,
 		}
+		json.Unmarshal([]byte(resultRaw.Meta), &result.Meta)
 		results = append(results, result)
 	}
 
-	return results
+	return results, nil
 }

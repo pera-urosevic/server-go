@@ -2,36 +2,36 @@ package search
 
 import (
 	"encoding/json"
-	"fmt"
 	"server/api/dj/database"
+	"server/api/dj/database/model"
+	"server/api/dj/log"
 	"server/api/dj/types"
 )
 
-func Search(q string) []types.RecordQueryResult {
+func Search(q string) ([]types.QueryResult, error) {
 	db, err := database.Database()
 	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
-	sql := fmt.Sprintf("SELECT 'Search' as query, * FROM songs WHERE path LIKE '%%%s%%' OR meta LIKE '%%%s%%'", q, q)
-
-	rows, err := db.Query(sql)
-	if err != nil {
-		panic(err)
+		log.Log(err)
+		return nil, err
 	}
 
-	results := []types.RecordQueryResult{}
-	for rows.Next() {
-		result := types.RecordQueryResult{}
-		var metaJson string
-		err := rows.Scan(&result.Query, &result.Path, &metaJson, &result.Datetime)
-		json.Unmarshal([]byte(metaJson), &result.Meta)
-		if err != nil {
-			panic(err)
+	songs := []model.Song{}
+	res := db.Find(&songs, "path LIKE ? OR meta LIKE ?", "%"+q+"%", "%"+q+"%")
+	if res.Error != nil {
+		log.Log(res.Error)
+		return nil, res.Error
+	}
+
+	results := []types.QueryResult{}
+	for _, song := range songs {
+		result := types.QueryResult{
+			Query:    "Search",
+			Path:     song.Path,
+			Datetime: song.Datetime,
 		}
+		json.Unmarshal([]byte(song.Meta), &result.Meta)
 		results = append(results, result)
 	}
 
-	return results
+	return results, nil
 }

@@ -1,6 +1,9 @@
 package database
 
-import "server/api/cleaner/log"
+import (
+	"server/api/cleaner/database/model"
+	"server/api/cleaner/log"
+)
 
 func GetBookmarks() ([]string, error) {
 	db, err := Database()
@@ -8,24 +11,18 @@ func GetBookmarks() ([]string, error) {
 		log.Log(err)
 		return nil, err
 	}
-	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM [bookmarks] order by [path]")
-	if err != nil {
-		log.Log(err)
-		return nil, err
+	bookmarks := []model.Bookmark{}
+	res := db.Find(&bookmarks)
+	if res.Error != nil {
+		log.Log(res.Error)
+		return nil, res.Error
 	}
 
-	bookmarks := []string{}
-	for rows.Next() {
-		bookmark := ""
-		err := rows.Scan(&bookmark)
-		if err != nil {
-			log.Log(err)
-			return nil, err
-		}
-		bookmarks = append(bookmarks, bookmark)
+	bookmarkPaths := []string{}
+	for _, bookmark := range bookmarks {
+		bookmarkPaths = append(bookmarkPaths, bookmark.Path)
 	}
 
-	return bookmarks, nil
+	return bookmarkPaths, nil
 }

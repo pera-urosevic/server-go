@@ -1,6 +1,9 @@
 package database
 
-import "server/api/cleaner/log"
+import (
+	"server/api/cleaner/database/model"
+	"server/api/cleaner/log"
+)
 
 func AddBookmark(bookmark string) error {
 	db, err := Database()
@@ -8,12 +11,11 @@ func AddBookmark(bookmark string) error {
 		log.Log(err)
 		return err
 	}
-	defer db.Close()
 
-	_, err = db.Exec("INSERT INTO [bookmarks] ([path]) VALUES (?)", bookmark)
-	if err != nil {
-		log.Log(err)
-		return err
+	res := db.Create(&model.Bookmark{Path: bookmark})
+	if res.Error != nil {
+		log.Log(res.Error)
+		return res.Error
 	}
 
 	return nil

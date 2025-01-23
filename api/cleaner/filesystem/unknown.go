@@ -2,12 +2,13 @@ package filesystem
 
 import (
 	"os"
+	"server/api/cleaner/database/model"
 	"server/api/cleaner/log"
 	"server/api/cleaner/types"
 	"strings"
 )
 
-func isKnown(known []types.RecordCleaner, path string, name string) bool {
+func isKnown(known []model.Cleaner, path string, name string) bool {
 	for _, record := range known {
 		if record.Path == path && record.Name == name {
 			return true
@@ -16,7 +17,7 @@ func isKnown(known []types.RecordCleaner, path string, name string) bool {
 	return false
 }
 
-func Unknown(known []types.RecordCleaner, scanPath string) ([]types.Node, error) {
+func Unknown(known []model.Cleaner, scanPath string) ([]types.Node, error) {
 	unknown := []types.Node{}
 	root := os.Getenv("CLEANER_ROOT")
 	base := strings.Replace(scanPath, root, "", 1)

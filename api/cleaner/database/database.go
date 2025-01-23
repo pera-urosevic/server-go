@@ -3,13 +3,13 @@ package database
 import (
 	"os"
 
-	"database/sql"
-
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 	_ "modernc.org/sqlite"
 )
 
-func Database() (*sql.DB, error) {
+func Database() (*gorm.DB, error) {
 	dbPath := os.Getenv("CLEANER_DB_PATH")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	return db, err
 }

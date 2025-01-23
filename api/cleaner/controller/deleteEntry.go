@@ -2,8 +2,8 @@ package controller
 
 import (
 	"server/api/cleaner/controller/lib"
+	"server/api/cleaner/database/model"
 	"server/api/cleaner/filesystem"
-	"server/api/cleaner/types"
 	"server/system"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 
 func DeleteEntry(r *gin.Engine) {
 	r.DELETE("/cleaner/delete", func(c *gin.Context) {
-		var record = types.RecordCleaner{}
+		var record = model.Cleaner{}
 		err := c.BindJSON(&record)
 		if err != nil {
 			system.GinError(c, err, false)

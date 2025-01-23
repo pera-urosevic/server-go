@@ -1,19 +1,21 @@
 package database
 
-import "server/api/cleaner/log"
+import (
+	"server/api/cleaner/database/model"
+	"server/api/cleaner/log"
+)
 
-func RemoveBookmark(bookmark string) error {
+func RemoveBookmark(path string) error {
 	db, err := Database()
 	if err != nil {
 		log.Log(err)
 		return err
 	}
-	defer db.Close()
 
-	_, err = db.Exec("DELETE FROM [bookmarks] WHERE [path] = ?", bookmark)
-	if err != nil {
-		log.Log(err)
-		return err
+	res := db.Where("path = ?", path).Delete(&model.Bookmark{})
+	if res.Error != nil {
+		log.Log(res.Error)
+		return res.Error
 	}
 
 	return nil

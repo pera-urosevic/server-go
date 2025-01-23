@@ -1,33 +1,22 @@
 package database
 
 import (
+	"server/api/cleaner/database/model"
 	"server/api/cleaner/log"
-	"server/api/cleaner/types"
 )
 
-func GetPaths() ([]types.RecordCleaner, error) {
+func GetPaths() ([]model.Cleaner, error) {
 	db, err := Database()
 	if err != nil {
 		log.Log(err)
 		return nil, err
 	}
-	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM [cleaner]")
-	if err != nil {
-		log.Log(err)
-		return nil, err
-	}
-
-	records := []types.RecordCleaner{}
-	for rows.Next() {
-		record := types.RecordCleaner{}
-		err := rows.Scan(&record.Path, &record.Name)
-		if err != nil {
-			log.Log(err)
-			return nil, err
-		}
-		records = append(records, record)
+	records := []model.Cleaner{}
+	res := db.Find(&records)
+	if res.Error != nil {
+		log.Log(res.Error)
+		return nil, res.Error
 	}
 
 	return records, nil

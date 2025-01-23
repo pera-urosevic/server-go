@@ -3,12 +3,12 @@ package filesystem
 import (
 	"os"
 	"os/exec"
+	"server/api/cleaner/database/model"
 	"server/api/cleaner/log"
-	"server/api/cleaner/types"
 	"strings"
 )
 
-func Delete(record types.RecordCleaner) error {
+func Delete(record model.Cleaner) error {
 	root := os.Getenv("CLEANER_ROOT")
 	path := root + record.Path + "/" + record.Name
 	path = strings.ReplaceAll(path, "/", "\\")

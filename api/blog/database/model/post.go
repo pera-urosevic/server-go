@@ -1,4 +1,12 @@
-package types
+package model
+
+type Tabler interface {
+	TableName() string
+}
+
+func (Post) TableName() string {
+	return "blog"
+}
 
 type Post struct {
 	ID          int64  `json:"id"`

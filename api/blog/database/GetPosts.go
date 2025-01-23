@@ -1,36 +1,20 @@
 package database
 
 import (
+	"server/api/blog/database/model"
 	"server/api/blog/log"
-	"server/api/blog/types"
 )
 
-func GetPosts(filter string) ([]types.Post, error) {
+func GetPosts(filter string) ([]model.Post, error) {
 	db, err := Database()
 	if err != nil {
 		log.Log(err)
 		return nil, err
 	}
-	defer db.Close()
 
+	posts := []model.Post{}
 	f := "%" + filter + "%"
-	rows, err := db.Query("SELECT * FROM [blog] WHERE [url] LIKE ? OR [title] LIKE ? OR [description] LIKE ? ORDER BY [timestamp] DESC", f, f, f)
-	if err != nil {
-		log.Log(err)
-		return nil, err
-	}
-
-	posts := []types.Post{}
-	for rows.Next() {
-		post := types.Post{}
-		err := rows.Scan(&post.ID, &post.Timestamp, &post.Title, &post.Category, &post.Template, &post.Description, &post.Image, &post.URL)
-		if err != nil {
-			log.Log(err)
-			return nil, err
-		}
-
-		posts = append(posts, post)
-	}
+	db.Where("url LIKE ? OR title LIKE ? OR description LIKE ?", f, f, f).Order("timestamp DESC").Find(&posts)
 
 	return posts, nil
 }

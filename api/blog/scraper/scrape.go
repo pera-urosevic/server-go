@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"server/api/blog/database/model"
 	"server/api/blog/log"
 	"server/api/blog/scraper/image"
 	"server/api/blog/scraper/scrapers"
@@ -28,7 +29,7 @@ var scraperMatchers = types.Scrapers{
 	},
 }
 
-func Scrape(post types.Post) (types.Post, error) {
+func Scrape(post model.Post) (model.Post, error) {
 	client := http.Client{}
 	req, err := http.NewRequest("GET", post.URL, nil)
 	if err != nil {

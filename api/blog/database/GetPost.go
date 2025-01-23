@@ -1,23 +1,19 @@
 package database
 
 import (
+	"server/api/blog/database/model"
 	"server/api/blog/log"
-	"server/api/blog/types"
 )
 
-func GetPost(postID int64) (types.Post, error) {
+func GetPost(postID int64) (model.Post, error) {
 	db, err := Database()
 	if err != nil {
 		log.Log(err)
-		return types.Post{}, err
+		return model.Post{}, err
 	}
-	defer db.Close()
-	post := types.Post{}
-	row := db.QueryRow("SELECT * FROM [blog] WHERE [id] = ?", postID)
-	err = row.Scan(&post.ID, &post.Timestamp, &post.Title, &post.Category, &post.Template, &post.Description, &post.Image, &post.URL)
-	if err != nil {
-		log.Log(err)
-		return types.Post{}, err
-	}
+
+	post := model.Post{}
+	db.First(&post, postID)
+
 	return post, nil
 }

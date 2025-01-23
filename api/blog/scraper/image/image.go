@@ -5,8 +5,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"server/api/blog/database/model"
 	"server/api/blog/log"
-	"server/api/blog/types"
 
 	"github.com/disintegration/imaging"
 )
@@ -19,23 +19,23 @@ func pathImages() string {
 	return fmt.Sprintf("%s\\Data\\Blog\\Images", home)
 }
 
-func pathOriginal(post types.Post) string {
+func pathOriginal(post model.Post) string {
 	return fmt.Sprintf("%s\\original\\%s-image", pathImages(), post.Timestamp)
 }
 
-func pathThumbnail(post types.Post) string {
+func pathThumbnail(post model.Post) string {
 	return fmt.Sprintf("%s\\thumbnail\\%s-image.jpg", pathImages(), post.Timestamp)
 }
 
-func pathExcerpt(post types.Post) string {
+func pathExcerpt(post model.Post) string {
 	return fmt.Sprintf("%s\\excerpt\\%s-image.jpg", pathImages(), post.Timestamp)
 }
 
-func pathPost(post types.Post) string {
+func pathPost(post model.Post) string {
 	return fmt.Sprintf("%s\\post\\%s-image.jpg", pathImages(), post.Timestamp)
 }
 
-func Fetch(post types.Post) error {
+func Fetch(post model.Post) error {
 	res, err := http.Get(post.Image)
 	if err != nil {
 		log.Log(err)
@@ -92,7 +92,7 @@ func Fetch(post types.Post) error {
 	return nil
 }
 
-func Delete(post types.Post) error {
+func Delete(post model.Post) error {
 	err := os.Remove(pathOriginal(post))
 	if err != nil {
 		log.Log(err)

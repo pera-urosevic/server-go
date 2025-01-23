@@ -1,6 +1,9 @@
 package database
 
-import "server/api/blog/log"
+import (
+	"server/api/blog/database/model"
+	"server/api/blog/log"
+)
 
 func RemovePost(postID int64) error {
 	db, err := Database()
@@ -8,13 +11,8 @@ func RemovePost(postID int64) error {
 		log.Log(err)
 		return err
 	}
-	defer db.Close()
 
-	_, err = db.Exec("DELETE FROM [blog] WHERE [id] = ?", postID)
-	if err != nil {
-		log.Log(err)
-		return err
-	}
+	db.Delete(&model.Post{}, 10)
 
 	return nil
 }

@@ -1,6 +1,8 @@
 package database
 
 import (
+	"fmt"
+	"server/api/blog/database/model"
 	"server/api/blog/log"
 	"time"
 )
@@ -11,20 +13,23 @@ func InsertPost(url string) (int64, error) {
 		log.Log(err)
 		return 0, err
 	}
-	defer db.Close()
 
 	timestamp := time.Now().UnixMilli()
-	res, err := db.Exec("INSERT INTO [blog] ([timestamp], [title], [category], [template], [description], [image], [url]) VALUES (?, ?, ?, ?, ?, ?, ?)", timestamp, "", "", "", "", "", url)
-	if err != nil {
-		log.Log(err)
-		return 0, err
+	post := model.Post{
+		Timestamp:   fmt.Sprintf("%d", timestamp),
+		Title:       "",
+		Category:    "",
+		Template:    "",
+		Description: "",
+		Image:       "",
+		URL:         url,
 	}
 
-	id, err := res.LastInsertId()
-	if err != nil {
-		log.Log(err)
-		return 0, err
+	res := db.Create(&post)
+	if res.Error != nil {
+		log.Log(res.Error)
+		return 0, res.Error
 	}
 
-	return id, nil
+	return post.ID, nil
 }

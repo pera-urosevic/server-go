@@ -1,22 +1,21 @@
 package database
 
 import (
+	"server/api/blog/database/model"
 	"server/api/blog/log"
-	"server/api/blog/types"
 )
 
-func UpdatePost(post types.Post) error {
+func UpdatePost(post model.Post) error {
 	db, err := Database()
 	if err != nil {
 		log.Log(err)
 		return err
 	}
-	defer db.Close()
 
-	_, err = db.Exec("UPDATE [blog] SET [timestamp]=?, [title]=?, [category]=?, [template]=?, [description]=?, [image]=?, [url]=? WHERE [id] = ?", post.Timestamp, post.Title, post.Category, post.Template, post.Description, post.Image, post.URL, post.ID)
-	if err != nil {
-		log.Log(err)
-		return err
+	res := db.Save(&post)
+	if res.Error != nil {
+		log.Log(res.Error)
+		return res.Error
 	}
 
 	return nil

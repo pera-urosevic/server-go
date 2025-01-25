@@ -17,9 +17,7 @@ func Net() bool {
 	client := http.Client{
 		Timeout: 2 * time.Second,
 	}
+
 	_, err := client.Head(url)
-	if err != nil {
-		log.Log(err)
-	}
 	return err == nil
 }

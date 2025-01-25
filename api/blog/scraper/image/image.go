@@ -12,11 +12,8 @@ import (
 )
 
 func pathImages() string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-	return fmt.Sprintf("%s\\Data\\Blog\\Images", home)
+	blogPath := os.Getenv("BLOG_CACHE_PATH")
+	return fmt.Sprintf("%s\\Images", blogPath)
 }
 
 func pathOriginal(post model.Post) string {

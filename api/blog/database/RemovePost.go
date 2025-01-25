@@ -12,7 +12,7 @@ func RemovePost(postID int64) error {
 		return err
 	}
 
-	db.Delete(&model.Post{}, 10)
+	db.Delete(&model.Post{}, postID)
 
 	return nil
 }

@@ -35,7 +35,9 @@ func removeThumbnails(record model.Photo) error {
 
 func removeDB(photo model.Photo) error {
 	err := database.RemovePhoto(photo.ID)
-	log.Log(err)
+	if err != nil {
+		log.Log(err)
+	}
 	return err
 }
 

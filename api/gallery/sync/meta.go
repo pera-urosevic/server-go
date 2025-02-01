@@ -77,6 +77,16 @@ func metaCopyright(exif map[string]interface{}) string {
 	return ""
 }
 
+func metaPixelfed(exif map[string]interface{}) string {
+	pixelfed, ok := exif["Pixelfed"]
+
+	if ok {
+		return pixelfed.(string)
+	}
+
+	return ""
+}
+
 func readMeta(file types.AlbumFile) (model.Photo, error) {
 	run := exec.Command("exiftool.exe", "-json", file.Path)
 	output, err := run.CombinedOutput()
@@ -100,6 +110,7 @@ func readMeta(file types.AlbumFile) (model.Photo, error) {
 		Description: metaDescription(exif),
 		Keywords:    metaKeywords(exif),
 		Copyright:   metaCopyright(exif),
+		Pixelfed:    metaPixelfed(exif),
 	}
 
 	return record, nil

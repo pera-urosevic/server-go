@@ -44,6 +44,11 @@ func copyright(params []string, copyright string) []string {
 	return params
 }
 
+func pixelfed(params []string, pixelfed string) []string {
+	params = append(params, fmt.Sprintf("-EXIF:Pixelfed=%s", pixelfed))
+	return params
+}
+
 func Update(photo model.Photo) (int64, error) {
 	params := []string{"-m", "-overwrite_original", "-XMP=", "-Orientation=", "-gps:all="}
 	params = title(params, photo.Title)
@@ -51,6 +56,7 @@ func Update(photo model.Photo) (int64, error) {
 	params = keywords(params, photo.Keywords)
 	params = datetime(params, photo.Datetime)
 	params = copyright(params, photo.Copyright)
+	params = pixelfed(params, photo.Pixelfed)
 	params = append(params, photo.Path)
 
 	run := exec.Command("exiftool.exe", params...)

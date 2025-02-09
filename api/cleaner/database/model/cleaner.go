@@ -5,6 +5,7 @@ func (Cleaner) TableName() string {
 }
 
 type Cleaner struct {
-	Path string `json:"path"`
-	Name string `json:"name"`
+	Path   string `json:"path"`
+	Name   string `json:"name"`
+	Status int64  `json:"status"`
 }

@@ -22,9 +22,11 @@ func List(c *gin.Context, path string) {
 	}
 
 	for i, entry := range entries {
+		entries[i].Status = -1
 		for _, record := range records {
 			if entry.Name == record.Name && path == record.Path {
-				entries[i].OK = true
+				entries[i].Status = record.Status
+				break
 			}
 		}
 	}
